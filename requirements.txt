@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-multipart
+requests
+pandas
+tensorflow
+keras>=3.0
+numpy
+Pillow
+streamlit
