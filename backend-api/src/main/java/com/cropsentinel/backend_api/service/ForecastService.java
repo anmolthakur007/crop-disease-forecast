@@ -10,6 +10,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,5 +56,40 @@ public class ForecastService {
 
     public List<ForecastHistory> getHistory() {
         return forecastRepository.findAllByOrderByCreatedAtDesc();
+    }
+
+    public Map<String, Object> getStats() {
+        List<ForecastHistory> all = forecastRepository.findAll();
+        Map<String, Object> stats = new HashMap<>();
+
+        if (all.isEmpty()) {
+            stats.put("totalForecasts", 0);
+            stats.put("averageRisk", 0);
+            stats.put("highestRisk", 0);
+            stats.put("mostCommonDisease", "No data yet");
+            return stats;
+        }
+
+        long total = all.size();
+        double avgRisk = all.stream()
+                .mapToDouble(ForecastHistory::getFinalOutbreakRisk)
+                .average().orElse(0);
+        double highestRisk = all.stream()
+                .mapToDouble(ForecastHistory::getFinalOutbreakRisk)
+                .max().orElse(0);
+        String mostCommon = all.stream()
+                .collect(java.util.stream.Collectors.groupingBy(
+                        ForecastHistory::getPredictedCondition,
+                        java.util.stream.Collectors.counting()))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse("Unknown");
+
+        stats.put("totalForecasts", total);
+        stats.put("averageRisk", Math.round(avgRisk * 10.0) / 10.0);
+        stats.put("highestRisk", Math.round(highestRisk * 10.0) / 10.0);
+        stats.put("mostCommonDisease", mostCommon.replace("___", " → "));
+        return stats;
     }
 }

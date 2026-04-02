@@ -18,6 +18,8 @@
                     maxWidth="Infinity" style="-fx-background-color: #4a7c59; -fx-text-fill: white;"/>
             <Button fx:id="btnChart" text="📊  Chart" onAction="#showChart"
                     maxWidth="Infinity" style="-fx-background-color: #4a7c59; -fx-text-fill: white;"/>
+            <Button fx:id="btnStats" text="📊  Dashboard" onAction="#showStats"
+                    maxWidth="Infinity" style="-fx-background-color: #4a7c59; -fx-text-fill: white;"/>
         </VBox>
     </left>
 

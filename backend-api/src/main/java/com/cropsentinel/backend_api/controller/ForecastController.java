@@ -29,4 +29,9 @@ public class ForecastController {
     public List<ForecastHistory> history() {
         return forecastService.getHistory();
     }
+
+    @GetMapping("/stats")
+    public Map<String, Object> stats() {
+        return forecastService.getStats();
+    }
 }

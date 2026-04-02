@@ -30,6 +30,11 @@ public class MainController {
         loadView("chart.fxml");
     }
 
+    @FXML
+    public void showStats() {
+        loadView("stats.fxml");
+    }
+
     private void loadView(String fxml) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cropsentinel/" + fxml));
