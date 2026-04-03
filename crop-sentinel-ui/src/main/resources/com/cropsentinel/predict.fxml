@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
 
 <VBox spacing="20" xmlns:fx="http://javafx.com/fxml"
@@ -10,30 +11,49 @@
     <Label text="Upload Leaf Image &amp; Get Forecast"
            style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2d5a27;"/>
 
-    <HBox spacing="20">
-        <VBox spacing="10">
+    <HBox spacing="30">
+        <!-- LEFT: inputs -->
+        <VBox spacing="10" prefWidth="260">
             <Label text="Latitude:"/>
-            <TextField fx:id="latField" promptText="e.g. 18.5204" prefWidth="200"/>
+            <TextField fx:id="latField" promptText="e.g. 18.5204"/>
             <Label text="Longitude:"/>
-            <TextField fx:id="lonField" promptText="e.g. 73.8567" prefWidth="200"/>
+            <TextField fx:id="lonField" promptText="e.g. 73.8567"/>
+            <Label text="OR enter address:"/>
+            <HBox spacing="8">
+                <TextField fx:id="addressField" promptText="e.g. Pune, India" HBox.hgrow="ALWAYS"/>
+                <Button text="📍" onAction="#lookupAddress"
+                        style="-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-padding: 8 12;"/>
+            </HBox>
+            <Label fx:id="addressStatus" text="" style="-fx-text-fill: gray; -fx-font-size: 11;"/>
+            <Separator/>
             <Button text="📁  Choose Leaf Image" onAction="#chooseImage"
                     style="-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-padding: 10 20;"/>
             <Label fx:id="fileLabel" text="No file chosen" style="-fx-text-fill: gray;"/>
             <Button text="🔍  Get Forecast" onAction="#getForecast"
-                    style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 14;"/>
+                    style="-fx-background-color: #e67e22; -fx-text-fill: white;
+                           -fx-padding: 10 20; -fx-font-size: 14;"/>
+            <Label fx:id="statusLabel" text="" style="-fx-text-fill: gray;"/>
         </VBox>
 
-        <VBox fx:id="resultBox" spacing="15" style="-fx-padding: 20; -fx-background-color: white;
-              -fx-border-color: #ddd; -fx-border-radius: 8;" visible="false">
+        <!-- MIDDLE: image preview -->
+        <VBox spacing="8" alignment="TOP_CENTER">
+            <Label text="Image Preview" style="-fx-text-fill: gray;"/>
+            <ImageView fx:id="imagePreview" fitWidth="200" fitHeight="200"
+                       preserveRatio="true"
+                       style="-fx-border-color: #ddd; -fx-border-width: 1;"/>
+        </VBox>
+
+        <!-- RIGHT: results -->
+        <VBox fx:id="resultBox" spacing="15" prefWidth="250"
+              style="-fx-padding: 20; -fx-background-color: white;
+                     -fx-border-color: #ddd; -fx-border-radius: 8;" visible="false">
             <Label text="Results" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
-            <Label fx:id="riskLabel" text="" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
-            <Label fx:id="conditionLabel" text=""/>
+            <Label fx:id="riskLabel" text="" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+            <Label fx:id="conditionLabel" text="" wrapText="true"/>
             <Label fx:id="tempLabel" text=""/>
             <Label fx:id="humidityLabel" text=""/>
             <Label fx:id="confidenceLabel" text=""/>
         </VBox>
     </HBox>
-
-    <Label fx:id="statusLabel" text="" style="-fx-text-fill: gray;"/>
 
 </VBox>
