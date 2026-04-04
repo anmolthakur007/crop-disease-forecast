@@ -1,5 +1,5 @@
 package com.cropsentinel.backend_api.controller;
-
+import com.cropsentinel.backend_api.service.DiseaseInfoService;
 import com.cropsentinel.backend_api.model.ForecastHistory;
 import com.cropsentinel.backend_api.service.ForecastService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +33,13 @@ public class ForecastController {
     @GetMapping("/stats")
     public Map<String, Object> stats() {
         return forecastService.getStats();
+    }
+
+    @Autowired
+    private DiseaseInfoService diseaseInfoService;
+
+    @GetMapping("/disease-info/{diseaseKey}")
+    public Map<String, String> getDiseaseInfo(@PathVariable String diseaseKey) {
+        return diseaseInfoService.getInfo(diseaseKey);
     }
 }

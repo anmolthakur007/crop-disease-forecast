@@ -165,7 +165,7 @@ public class PredictController {
 
                     if (risk > 75) {
                         riskLabel.setText("🔴 HIGH RISK: " + risk + "%");
-                        riskLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16; -fx-font-weight: bold;");                    } else if (risk > 40) {
+                        riskLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16; -fx-font-weight: bold;");                  } else if (risk > 40) {
                         riskLabel.setText("🟡 MODERATE: " + risk + "%");
                         riskLabel.setStyle("-fx-text-fill: orange; -fx-font-size: 20; -fx-font-weight: bold;");
                     } else {
@@ -180,10 +180,50 @@ public class PredictController {
 
                     resultBox.setVisible(true);
                     statusLabel.setText("");
+
+                    if (risk > 75) {
+                        showDiseaseAlert(condition, risk);
+                    }
                 });
 
             } catch (Exception e) {
                 Platform.runLater(() -> statusLabel.setText("Error: " + e.getMessage()));
+            }
+        }).start();
+    }
+
+    private void showDiseaseAlert(String condition, double risk) {
+        new Thread(() -> {
+            try {
+                String encoded = condition.replace(" ", "%20");
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:8080/api/disease-info/" + encoded))
+                        .GET()
+                        .build();
+
+                HttpResponse<String> response = client.send(request,
+                        HttpResponse.BodyHandlers.ofString());
+
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> info = mapper.readValue(response.body(), Map.class);
+
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("⚠️ Disease Alert");
+                    alert.setHeaderText("HIGH RISK DETECTED: " + info.get("name")
+                            + " (" + risk + "%)");
+
+                    String content = "SYMPTOMS:\n" + info.get("symptoms")
+                            + "\n\nRECOMMENDED TREATMENT:\n" + info.get("treatment");
+
+                    alert.setContentText(content);
+                    alert.getDialogPane().setPrefWidth(500);
+                    alert.showAndWait();
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
     }
