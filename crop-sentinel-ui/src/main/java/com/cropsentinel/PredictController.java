@@ -206,7 +206,7 @@ public class PredictController {
                         HttpResponse.BodyHandlers.ofString());
 
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> info = mapper.readValue(response.body(), Map.class);
+                Map<String, String> info = mapper.readValue(response.body(), new com.fasterxml.jackson.core.type.TypeReference<Map<String, String>>() {});
 
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.WARNING);

@@ -32,7 +32,7 @@ public class StatsController {
 
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, Object> stats = mapper.readValue(
-                        response.body(), Map.class);
+                        response.body(), new com.fasterxml.jackson.core.type.TypeReference<Map<String, Object>>() {});
 
                 Platform.runLater(() -> {
                     totalLabel.setText(String.valueOf(stats.get("totalForecasts")));

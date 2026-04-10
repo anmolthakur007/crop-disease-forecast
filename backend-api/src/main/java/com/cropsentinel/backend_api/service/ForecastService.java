@@ -38,7 +38,7 @@ public class ForecastService {
 
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
 
-        ResponseEntity<Map> response = restTemplate.postForEntity(PYTHON_URL, request, Map.class);
+        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(PYTHON_URL, org.springframework.http.HttpMethod.POST, request, new org.springframework.core.ParameterizedTypeReference<Map<String, Object>>() {});
         Map<String, Object> result = response.getBody();
 
         ForecastHistory record = new ForecastHistory();
